@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { productsControllers } = require('./controllers');
+const { productsControllers, salesControllers } = require('./controllers');
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.get('/', (_request, response) => {
 app.get('/products', productsControllers.listProducts);
 app.get('/products/:id', productsControllers.listProductById);
 app.post('/products', productsControllers.create);
+app.post('/sales', salesControllers.create);
 
 app.use((error, _req, res, _next) => {
   if (error.status) return res.status(error.status).json({ message: error.message });
