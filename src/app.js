@@ -14,6 +14,9 @@ app.get('/', (_request, response) => {
 app.get('/products', productsControllers.listProducts);
 app.get('/products/:id', productsControllers.listProductById);
 app.post('/products', productsControllers.create);
+
+app.get('/sales', salesControllers.listSales);
+app.get('/sales/:id', salesControllers.listSalesById);
 app.post('/sales', salesControllers.create);
 
 app.use((error, _req, res, _next) => {
