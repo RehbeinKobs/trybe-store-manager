@@ -1,5 +1,5 @@
 const express = require('express');
-const { productsController } = require('./controllers');
+const { productsControllers } = require('./controllers');
 
 const app = express();
 
@@ -8,8 +8,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.get('/products', productsController.listProducts);
-app.get('/products/:id', productsController.listProductById);
+app.get('/products', productsControllers.listProducts);
+app.get('/products/:id', productsControllers.listProductById);
 
 app.use((error, _req, res, _next) => {
   if (error.status) return res.status(error.status).json({ message: error.message });
