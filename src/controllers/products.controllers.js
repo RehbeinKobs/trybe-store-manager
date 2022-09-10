@@ -19,7 +19,18 @@ const listProductById = async (req, res, next) => {
   }
 };
 
+const create = async (req, res, next) => {
+  try {
+    const { body } = req;
+    const product = await productsServices.create(body);
+    res.status(201).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   listProducts,
   listProductById,
+  create,
 };

@@ -15,7 +15,14 @@ describe('Testes de unidade do model de products', function () {
   });
   it('listProductById retorna o produto cujo id foi passado por parametro', async function () {
     sinon.stub(connection, 'execute').resolves([[products[0]]]);
-    const result1 = await productsModels.listProductById(1);
-    expect(result1).to.deep.equal(products[0]);
+    const result = await productsModels.listProductById(1);
+    expect(result).to.deep.equal(products[0]);
+  });
+  it('create retorna o produto inserido', async function () {
+    const { name } = products[0];
+    const product = { name };
+    sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+    const result = await productsModels.create(product);
+    expect(result).to.deep.equal({ id: 4, ...product });
   });
 });

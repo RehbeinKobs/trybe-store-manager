@@ -16,11 +16,24 @@ describe('Testes de unidade do service de products', function () {
   });
   it('listProductById retorna o produto cujo id foi passado por parametro', async function () {
     sinon.stub(productsModels, 'listProductById').resolves(products[0]);
-    const result1 = await productsServices.listProductById(1);
-    expect(result1).to.deep.equal(products[0]);
+    const result = await productsServices.listProductById(1);
+    expect(result).to.deep.equal(products[0]);
   });
   it('listProductById retorna um erro caso id não existir no banco de dados', async function () {
     sinon.stub(productsModels, 'listProductById').resolves(undefined);
     await expectAsyncThrowError(productsServices.listProductById);
+  });
+  it('create retorna o produto inserido', async function () {
+    sinon.stub(productsModels, 'create').resolves(products[0]);
+    const result = await productsServices.create({ name: "xablau" });
+    expect(result).to.deep.equal(products[0]);
+  });
+  it('create retorna um erro caso o body não possua a chave "name"', async function () {
+    const call = () => productsServices.create({ noname: "xablau" });
+    await expectAsyncThrowError(call);
+  });
+  it('create retorna um erro caso o name seja tenha menos de 5 chars', async function () {
+    const call = () => productsServices.create({ name: "xabl" });
+    await expectAsyncThrowError(call);
   });
 });

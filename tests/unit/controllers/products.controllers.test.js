@@ -10,6 +10,7 @@ const products = require('../mocks/productsMock');
 
 describe('Testes de unidade do controller de products', function () {
   afterEach(sinon.restore);
+
   it('listProducts retorna a lista de todos os produtos', async function () {
     const response = {};
     const res = {
@@ -26,6 +27,7 @@ describe('Testes de unidade do controller de products', function () {
     expect(response.status).to.equal(200);
     expect(response.json).to.equal(products);
   });
+
   it('em caso de erro listProducts passa para o catch', async function () {
     let error = null;
     const throwError = () => {
@@ -38,6 +40,7 @@ describe('Testes de unidade do controller de products', function () {
     await productsControllers.listProducts({}, {}, catchError);
     expect(error).to.be.an("Error");
   });
+
   it('listProductById retorna o produto cujo id foi passado', async function () {
     const response = {};
     const req = {
@@ -57,6 +60,7 @@ describe('Testes de unidade do controller de products', function () {
     expect(response.status).to.equal(200);
     expect(response.json).to.deep.equal(products[0]);
   });
+  
   it('em caso de erro listProductById passa para o catch', async function () {
     let error = null;
     const throwError = () => {
@@ -67,6 +71,39 @@ describe('Testes de unidade do controller de products', function () {
     }
     sinon.stub(productsServices, 'listProductById').resolves(throwError);
     await productsControllers.listProductById({}, {}, catchError);
+    expect(error).to.be.an("Error");
+  });
+
+  it('create retorna o produto inserido', async function () {
+    const response = {};
+    const req = {
+      body: { name: products[0].name },
+    }
+    const res = {
+      status: (s) => {
+        response.status = s;
+        return res;
+      },
+      json: (p) => {
+        response.json = p;
+      }
+    };
+    sinon.stub(productsServices, 'create').resolves(products[0]);
+    await productsControllers.create(req, res);
+    expect(response.status).to.equal(201);
+    expect(response.json).to.deep.equal(products[0]);
+  });
+
+  it('em caso de erro create pasa para o catch', async function () {
+    let error = null;
+    const throwError = () => {
+      throw createError(500, "internal server error");
+    }
+    const catchError = (err) => {
+      error = err;
+    }
+    sinon.stub(productsServices, 'create').resolves(throwError);
+    await productsControllers.create({}, {}, catchError);
     expect(error).to.be.an("Error");
   });
 });
